@@ -1,0 +1,12 @@
+/dist/
+/bin/
+/out/
+*.test
+.DS_Store
+
+# Niemals ins Repo: lokale Geheimnisse und erzeugte Zustände
+secrets.yaml
+secrets.local.yaml
+*.key
+*.pem
+/testdata/vm/
