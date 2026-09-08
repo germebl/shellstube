@@ -1,0 +1,63 @@
+id: adguard-home
+name: AdGuard Home
+category: dns
+summary: Filtert Werbung und Tracker für alle Geräte im Netz — auch für die, auf denen man nichts installieren kann.
+upstream: https://github.com/AdguardTeam/AdGuardHome
+license: GPL-3.0
+
+image:
+  ref: docker.io/adguard/adguardhome
+  tag_policy: pinned
+  arch: [amd64, arm64]
+
+resources:
+  memory_mb: 150
+  memory_source: estimate
+  disk_note: Wächst mit der Abfragehistorie. 1 GB reicht für Monate.
+
+rootless: true
+
+network:
+  mode: bridge
+  ports:
+    - 5353/udp   # DNS. Port 53 erreicht der Dienst über eine nftables-Weiterleitung.
+    - 3000/tcp   # Oberfläche, nur über den Reverse Proxy erreichbar
+
+volumes:
+  - path: /opt/adguardhome/work
+    purpose: Laufzeitdaten und Statistik
+    backup: false
+  - path: /opt/adguardhome/conf
+    purpose: Konfiguration und Filterlisten
+    backup: true
+
+backup:
+  strategy: files
+  restore_tested: false
+  restore_notes: >
+    Nach dem Zurückspielen muss der Dienst neu starten, sonst bleibt die alte Konfiguration
+    im Speicher aktiv.
+
+reverse_proxy:
+  needed: true
+  websocket: false
+
+sso:
+  supported: none
+  notes: >
+    Bringt eine eigene Anmeldung mit und spricht kein OIDC. Wir stellen forward_auth davor,
+    wenn Authentik im Plan steht.
+
+status: experimental
+status_reason: >
+  Noch kein Lauf gegen eine echte VM. Sobald integrations-tester durch ist, wird das supported.
+
+caveats:
+  - >
+    Port 53 kann rootless nicht gebunden werden. Der Dienst hört auf 5353, eine
+    nftables-Weiterleitung schickt 53 dorthin — das erzeugt stube mit.
+  - >
+    Läuft AdGuard als DNS für das ganze Netz, hängt bei einem Ausfall alles. Wir tragen den
+    Auflöser des Anbieters als zweiten Eintrag ein, nicht als einzigen Ausweg.
+
+docs: docs/de/dienste/adguard-home.md

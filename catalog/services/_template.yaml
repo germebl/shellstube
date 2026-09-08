@@ -1,0 +1,54 @@
+# Vorlage für einen Dienst. Kopieren, ausfüllen, leere Felder leer lassen statt raten.
+# Ein Dienst = eine Datei. Reine Daten — für einen Beitrag braucht es kein Go.
+id:                  # kebab-case, stabil, wird zur URL /dienste/<id>
+name:                # Anzeigename, so wie das Projekt sich selbst nennt
+category:            # dns | secrets | media | photos | files | home | auth | monitoring | storage | ai
+summary:             # Ein Satz in Nutzersprache. Nicht "self-hosted X", sondern was es für dich tut.
+upstream:            # Projektseite
+license:             # Lizenz des Dienstes selbst
+
+image:
+  ref:               # Registry-Pfad ohne Tag
+  tag_policy:        # pinned | minor | latest — 'latest' braucht eine Begründung in caveats
+  arch: [amd64, arm64]
+
+resources:
+  memory_mb:         # realistischer Bedarf im Betrieb, nicht das Minimum aus der README
+  memory_source:     # measured | upstream | estimate
+  cpu_note:          # nur wenn relevant, z. B. Transkodierung
+  disk_note:
+
+rootless: true
+rootless_exception:  # Wenn rootless false ist: die Ursache in einem Satz. Nicht "geht sonst nicht".
+
+network:
+  mode: bridge       # bridge | host
+  host_reason:       # Pflicht bei host. Beispiel: Multicast für Geräteerkennung
+  ports: []          # nur >1024. Weiterleitung von 80/443 macht nftables, nicht der Dienst.
+
+volumes: []          # {path, purpose, backup: true|false}
+
+devices: []          # {path, reason} — z. B. /dev/dri für Hardwarebeschleunigung
+
+backup:
+  strategy:          # files | database_dump | both
+  pre_hook:          # Befehl vor der Sicherung, z. B. Datenbankauszug
+  post_hook:
+  restore_tested:    # true erst, wenn integrations-tester es bestätigt hat
+  restore_notes:
+
+depends_on: []       # ids anderer Dienste
+
+reverse_proxy:
+  needed: true
+  websocket: false
+  upload_limit_mb:
+
+sso:
+  supported:         # oidc | forward_auth | none
+  notes:
+
+status:              # supported | experimental
+status_reason:
+caveats: []          # konkret, mit Datum bei beweglichen Zielen
+docs: docs/de/dienste/<id>.md
