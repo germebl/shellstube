@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shellstube.de/schema/homelab-1.json",
+  "title": "homelab.yaml",
+  "description": "Die Absicht des Nutzers. Enthaelt niemals Geheimnisse - die liest stube aus einer lokalen Datei.",
+  "type": "object",
+  "required": ["version", "tier", "nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "const": 1 },
+    "tier": { "enum": ["t0", "t1", "t2", "t3"] },
+    "purpose": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["services", "virt", "store"] },
+      "default": ["services"]
+    },
+    "target_speed_gbe": {
+      "enum": [1, 2.5, 10],
+      "description": "Zielgeschwindigkeit im Haus. Die Streckenpruefung meldet jeden Abschnitt darunter."
+    },
+    "medium": { "enum": ["copper", "fiber"], "default": "copper" },
+
+    "wan": {
+      "type": "object",
+      "required": ["medium", "mode"],
+      "additionalProperties": false,
+      "properties": {
+        "medium": { "enum": ["vdsl", "ftth_gpon", "ftth_aon", "cable", "lte"] },
+        "isp": { "enum": ["telekom", "vodafone_dsl", "vodafone_tk", "1u1_tk", "1u1", "o2", "local", "other"] },
+        "handoff": { "enum": ["fritzbox", "dsl_modem", "ont_vendor", "ont_sfp", "media_converter", "docsis", "isp_router"] },
+        "mode": { "enum": ["router", "bridge", "passthrough"] },
+        "path": {
+          "enum": ["router", "switch"], "default": "router",
+          "description": "Wo die Leitung endet. Bei 'switch' traegt ein eigenes VLAN sie zum Router."
+        },
+        "dial": { "enum": ["pppoe", "dhcp", "static"] },
+        "vlan": { "type": "integer", "minimum": 1, "maximum": 4094 },
+        "addressing": { "enum": ["fixed_v4", "dynamic_v4", "cgnat", "unknown"] }
+      }
+    },
+
+    "dyndns": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "provider": { "type": "string", "description": "desec, hetzner, shellstube, none" },
+        "fqdn": { "type": "string" },
+        "records": { "type": "array", "items": { "enum": ["a", "aaaa"] }, "default": ["a", "aaaa"] },
+        "credentials_ref": {
+          "type": "string",
+          "description": "Verweis in die lokale Geheimnisdatei. NIEMALS das Geheimnis selbst."
+        }
+      }
+    },
+
+    "vlans": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]{1,15}$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "subnet"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "integer", "minimum": 1, "maximum": 4094 },
+          "subnet": { "type": "string", "pattern": "^((\\d{1,3}\\.){3}\\d{1,3}/\\d{1,2})$" },
+          "subnet6": { "type": "string" },
+          "egress": { "enum": ["full", "filtered", "internet_only", "none"], "default": "filtered" },
+          "comment": { "type": "string" }
+        }
+      }
+    },
+
+    "nodes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]{1,30}$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["role"],
+        "additionalProperties": false,
+        "properties": {
+          "role": { "enum": ["router", "switch", "ap", "compute", "storage", "ups", "wan"] },
+          "hardware": {
+            "type": "string",
+            "description": "id aus hardware/. Unbekannt heisst: wir erzeugen nichts dafuer."
+          },
+          "os": { "enum": ["debian-13", "openwrt", "nethsecurity", "vyos", "vendor"] },
+          "runtime": { "enum": ["podman-rootless", "none"] },
+          "virt": { "enum": ["none", "incus", "libvirt"], "default": "none" },
+          "memory_gb": { "type": "integer", "minimum": 1 },
+          "link_gbe": { "enum": [1, 2.5, 10, 25] },
+          "vlan": { "type": "string", "description": "Name aus vlans, nicht die Nummer." },
+          "managed_by": { "enum": ["openwisp", "none"], "default": "none" },
+          "storage": {
+            "type": "object", "additionalProperties": false,
+            "properties": {
+              "fs": { "enum": ["zfs", "btrfs", "ext4", "ceph", "vendor"] },
+              "usable_tb": { "type": "number", "minimum": 0 },
+              "provides": {
+                "type": "array", "uniqueItems": true,
+                "items": { "enum": ["file", "block", "object"] }
+              }
+            }
+          },
+          "ports": {
+            "type": "array",
+            "description": "Nur bei role=switch. Portbelegung, die Quelle fuer Kabelliste und VLAN-Zuordnung.",
+            "items": {
+              "type": "object",
+              "required": ["n"],
+              "additionalProperties": false,
+              "properties": {
+                "n": { "type": "integer", "minimum": 1 },
+                "kind": { "enum": ["rj45_1g", "rj45_2g5", "rj45_10g", "sfp", "sfp_plus", "qsfp"] },
+                "mode": { "enum": ["access", "trunk", "isolated"], "default": "access" },
+                "vlan": { "type": "string" },
+                "trunk_vlans": { "type": "array", "items": { "type": "string" } },
+                "peer": { "type": "string", "description": "Knotenname am anderen Ende." },
+                "poe": { "type": "boolean", "default": false },
+                "label": { "type": "string", "description": "Text fuer die Kabelbeschriftung." }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "links": {
+      "type": "array",
+      "description": "Physische Verbindungen. Reihenfolge egal, Richtung bedeutungslos.",
+      "items": {
+        "type": "array", "minItems": 2, "maxItems": 2,
+        "items": { "type": "string" }
+      }
+    },
+
+    "firewall": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "default": { "enum": ["deny", "allow"], "default": "deny" },
+        "crowdsec": { "type": "boolean", "default": true },
+        "suricata": { "enum": ["off", "optional", "on"], "default": "off" },
+        "allow": {
+          "type": "array",
+          "description": "Ausdrueckliche Ausnahmen. Alles andere ist verboten.",
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string" }, "to": { "type": "string" },
+              "ports": { "type": "array", "items": { "type": "string" } },
+              "comment": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "access": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "mode": { "enum": ["lan_only", "wireguard", "public_with_sso"] },
+        "sso": { "enum": ["none", "authentik"], "default": "none" }
+      }
+    },
+
+    "backup": {
+      "type": "object",
+      "required": ["target"],
+      "additionalProperties": false,
+      "properties": {
+        "target": { "enum": ["local_disk", "nas", "offsite", "none"] },
+        "target_ref": { "type": "string", "description": "Verweis in die lokale Geheimnisdatei." },
+        "restore_test": { "enum": ["weekly", "monthly", "off"], "default": "weekly" },
+        "retention_days": { "type": "integer", "minimum": 7, "default": 90 }
+      }
+    },
+
+    "services": {
+      "type": "array", "uniqueItems": true,
+      "description": "ids aus catalog/services/.",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,30}$" }
+    },
+
+    "docs": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "verbosity": { "enum": ["short", "reasoned", "full"], "default": "reasoned" },
+        "language": { "enum": ["de", "en"], "default": "de" }
+      }
+    },
+
+    "layout": {
+      "type": "object",
+      "description": "Reine Darstellung. Aendert nichts an der Anlage und gehoert deshalb getrennt.",
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+      }
+    }
+  }
+}

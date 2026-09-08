@@ -1,0 +1,81 @@
+# Glasfaser endet im Switch, der Router braucht kein SFP. WAN liegt allein in VLAN 4090.
+version: 1
+tier: t2
+purpose: [services, store]
+target_speed_gbe: 2.5
+medium: copper
+wan:
+  medium: ftth_gpon
+  isp: telekom
+  handoff: ont_sfp
+  mode: bridge
+  path: switch
+  dial: pppoe
+  vlan: 7
+  addressing: cgnat
+dyndns:
+  provider: desec
+  records: [a, aaaa]
+  credentials_ref: dyndns.token
+vlans:
+  srv:   { id: 10,   subnet: 10.10.0.0/24, egress: filtered }
+  home:  { id: 20,   subnet: 10.20.0.0/24, egress: filtered }
+  iot:   { id: 30,   subnet: 10.30.0.0/24, egress: none, comment: "nur DNS und NTP" }
+  mgmt:  { id: 99,   subnet: 10.99.0.0/24, egress: none }
+  wanraw: { id: 4090, subnet: 10.0.0.0/30, egress: none, comment: "rohes WAN, nur Port 11" }
+nodes:
+  rtr-01:
+    role: router
+    hardware: x86-mini-n150
+    os: openwrt
+    link_gbe: 2.5
+  sw-01:
+    role: switch
+    hardware: zyxel-xgs1210-12
+    os: openwrt
+    ports:
+      - { n: 1,  kind: rj45_1g,   mode: access, vlan: srv,  peer: cmp-01, label: "SW01 → CMP01" }
+      - { n: 3,  kind: rj45_1g,   mode: trunk,  trunk_vlans: [home, iot], peer: ap-01, poe: false, label: "SW03 → AP01" }
+      - { n: 9,  kind: rj45_2g5,  mode: trunk,  trunk_vlans: [srv, home, iot, mgmt, wanraw], peer: rtr-01, label: "SW09 → RTR Trunk" }
+      - { n: 11, kind: sfp_plus,  mode: isolated, vlan: wanraw, label: "WAN → SW11 · nicht umstecken" }
+  ap-01:
+    role: ap
+    hardware: zyxel-nwa50ax
+    os: openwrt
+    managed_by: openwisp
+  cmp-01:
+    role: compute
+    hardware: x86-mini-n150
+    os: debian-13
+    runtime: podman-rootless
+    virt: incus
+    memory_gb: 32
+    vlan: srv
+    storage:
+      fs: zfs
+      usable_tb: 8
+      provides: [file, block]
+links:
+  - [sw-01, rtr-01]
+  - [sw-01, ap-01]
+  - [sw-01, cmp-01]
+firewall:
+  default: deny
+  crowdsec: true
+  suricata: optional
+  allow:
+    - { from: home, to: srv, ports: ["443/tcp"], comment: "Dienste aus dem Heimnetz" }
+    - { from: iot,  to: srv, ports: ["53/udp", "123/udp"], comment: "nur Namensauflösung und Uhrzeit" }
+access:
+  mode: wireguard
+backup:
+  target: offsite
+  target_ref: backup.storagebox
+  restore_test: weekly
+services: [adguard-home]
+docs: { verbosity: full, language: de }
+layout:
+  rtr-01: { x: 30,  y: 170 }
+  sw-01:  { x: 250, y: 96 }
+  ap-01:  { x: 500, y: 16 }
+  cmp-01: { x: 500, y: 130 }

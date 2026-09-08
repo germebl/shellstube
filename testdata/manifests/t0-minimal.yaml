@@ -1,0 +1,27 @@
+# Kleinster gültiger Plan: ein Gerät, drei Dienste, Zugriff nur über WireGuard.
+version: 1
+tier: t0
+purpose: [services]
+wan:
+  medium: vdsl
+  isp: telekom
+  handoff: fritzbox
+  mode: bridge
+  dial: pppoe
+  vlan: 7
+  addressing: dynamic_v4
+nodes:
+  cmp-01:
+    role: compute
+    hardware: x86-mini-n150
+    os: debian-13
+    runtime: podman-rootless
+    memory_gb: 16
+    link_gbe: 1
+access:
+  mode: wireguard
+backup:
+  target: offsite
+  restore_test: weekly
+services: [adguard-home]
+docs: { verbosity: reasoned, language: de }
