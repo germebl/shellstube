@@ -1,0 +1,28 @@
+id: zyxel-pmg3000-d20b
+class: ont
+vendor: Zyxel
+model: PMG3000-D20B
+revision: "*"
+availability: retail
+firmware: {recommended: vendor}
+soc: "GPON SFU, ITU-T G.984"
+ports: {sfp: 1}
+power: {idle_w: null, source: unknown, note: "Spart gegenüber einem separaten ONT grob 5 W, weil Netzteil und Gehäuse entfallen."}
+price_eur: 60
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Ersetzt das ONT-Kästchen des Anbieters durch ein Steckmodul im Router. Es ist
+  dasselbe Modul, das die Telekom als Zubehör für die eigene Box vertreibt.
+verified: {by: none, scope: "Recherche, keine eigene Inbetriebnahme."}
+generates: [runbook-ont.md]
+caveats:
+  - "Der Anbieter muss die Seriennummer freischalten. Es gibt dokumentierte Fälle, in denen die Registrierung fehlschlägt."
+  - "Berichte über tägliche Verbindungsabbrüche mit neuer Adresse an manchen Anschlüssen."
+  - "Bekannte Probleme bei Glasfaser Nordwest."
+  - "Der Router braucht einen SFP-Käfig — vor dem Kauf gegen die Router-Hardware prüfen."
+alternatives: []
+sources:
+  - https://github.com/xvzf/zyxel-gpon-sfp
+  - https://www.zyxel.com/service-provider/global/en/products/fiber-oltsonts/gpon/sfus/pmg3000-d20b
+  - https://telekomhilft.telekom.de/conversations/festnetz-internet/lancom-router-1800ef-mit-zyxel-pmg3000-d20b-gpon-sfp-modul-registrierung-funktioniert-nicht/675578c2389f9f597b8b7463

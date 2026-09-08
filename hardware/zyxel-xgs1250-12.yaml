@@ -1,0 +1,26 @@
+id: zyxel-xgs1250-12
+class: switch
+vendor: Zyxel
+model: XGS1250-12
+revision: B1
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: realtek/rtl930x, profile: zyxel_xgs1250-12-b1, since: "24.10"}}
+soc: RTL9302B
+ports: {rj45_1g: 8, rj45_10g: 3, sfp_plus: 1}
+poe: {ports: 0, openwrt: none}
+power: {idle_w: null, source: unknown}
+price_eur: 200
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Die schnelle Variante: drei Multigigabit-Ports bis 10G plus SFP+. Der Weg
+  zwischen Rechen- und Speicherknoten, ohne Herstellerfirmware.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [/etc/config/network, portmatrix.md]
+caveats:
+  - "Kein PoE."
+  - "Der SFP+-Käfig funktioniert erst ab OpenWrt 24; ältere Stände zwingen zurück auf die Herstellerfirmware."
+alternatives: [zyxel-xgs1210-12]
+sources:
+  - https://forum.openwrt.org/t/zyxel-xgs1250-12-sfp-port-support/185722
+  - https://firmware-selector.openwrt.org/?id=zyxel_xgs1250-12-b1&target=realtek%2Frtl930x

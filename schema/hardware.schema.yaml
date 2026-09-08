@@ -1,0 +1,64 @@
+# shellstube — Schema für Einträge in der Hardwareliste (hardware/*.yaml)
+# Ein Gerät = eine Datei. Reine Daten, kein Code — Beiträge brauchen kein Go.
+id:            # kebab-case, eindeutig, stabil. Wird zur URL /hardware/<id>
+class:         # ont | modem | router | switch | ap | compute | storage | ups | accessory
+vendor:
+model:
+revision:      # WICHTIG: gleiche Modellnummer, andere Platine, anderes Verhalten.
+               # "*" nur, wenn nachweislich alle Revisionen gleich laufen.
+eol:           # true | false | unknown  — vom Hersteller abgekündigt
+availability:  # retail | used_only | odm_only | discontinued
+
+firmware:
+  recommended: # openwrt | nethsecurity | vyos | debian | vendor
+  openwrt:
+    target:    # z. B. realtek/rtl930x
+    profile:   # Profilname im Firmware Selector
+    since:     # erste OpenWrt-Version mit brauchbarer Unterstützung
+soc:           # z. B. RTL9302B, MT7621AT + MT7915
+
+ports:         # nur zutreffende Felder angeben, Rest weglassen
+  rj45_1g:
+  rj45_2g5:
+  rj45_10g:
+  sfp:
+  sfp_plus:
+  qsfp:
+  combo:       # Ports, die RJ45 oder SFP sein können
+
+poe:
+  ports:
+  standard:    # 802.3af | 802.3at | 802.3bt
+  budget_w:
+  openwrt: # full | manual | broken | none
+           #   full   = steuerbar ohne Handarbeit
+           #   manual = läuft, aber /etc/config/poe muss von Hand geschrieben werden
+           #   broken = Daemon erreicht den PoE-Controller nicht
+  note:
+
+wifi:
+  generation:  # 5 | 6 | 6e | 7
+  radios:
+  chip:
+
+power:
+  idle_w:      # null, solange nicht selbst gemessen — keine Herstellerangaben abschreiben
+  max_w:
+  source:      # measured | vendor | community | unknown
+
+price_eur:     # Circa-Wert, bewusst grob. Ein Richtwert, kein Angebot.
+price_asof:    # YYYY-MM
+
+status:        # recommended | tolerated | experimental | unsupported
+status_reason: # Ein Satz. Bei unsupported: warum wir nichts liefern können.
+
+verified:      # Was WIR geprüft haben. Leer lassen ist ehrlicher als raten.
+  by:          # ci | maintainer | community | none
+  version:
+  date:
+  scope:       # was tatsächlich getestet wurde
+
+generates:     # Welche Artefakte unser Renderer für dieses Gerät schreibt
+caveats:       # Liste. Konkret, mit Datum, wenn es ein bewegliches Ziel ist.
+alternatives:  # ids anderer Einträge
+sources:       # URLs, auf denen die Angaben beruhen

@@ -1,0 +1,23 @@
+id: glinet-mt6000
+class: router
+vendor: GL.iNet
+model: GL-MT6000 (Flint 2)
+revision: "*"
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: mediatek/filogic}}
+soc: MT7981B (Filogic 820)
+wifi: {generation: 6, radios: 2, chip: MediaTek}
+ports: {rj45_1g: 4, rj45_2g5: 2}
+power: {idle_w: null, source: unknown}
+price_eur: 150
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Wird mit einem OpenWrt-Abkömmling ausgeliefert, nimmt aber auch reines OpenWrt.
+  Gute Wahl, wenn Router und WLAN ein Gerät sein sollen.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [/etc/config/network, /etc/config/firewall, /etc/config/wireless]
+caveats:
+  - "Ab Werk läuft die Herstellervariante von OpenWrt. Für unsere Konfiguration wird reines OpenWrt aufgespielt."
+alternatives: [openwrt-one]
+sources: []

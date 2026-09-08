@@ -1,0 +1,18 @@
+id: ubiquiti-unifi
+class: ap
+vendor: Ubiquiti
+model: UniFi (Baureihe allgemein)
+revision: "neuere Geräte"
+availability: retail
+firmware: {recommended: vendor}
+status: unsupported
+status_reason: >
+  Kein Urteil über die Geräte — sie sind gut. Wir können nur nichts liefern:
+  Bei neueren Modellen ist der Bootloader gesperrt, freie Firmware lässt sich
+  nicht dauerhaft installieren, und das Ökosystem setzt einen eigenen Controller voraus.
+verified: {by: none}
+generates: []
+caveats:
+  - "Ältere UAC-Modelle lassen sich teilweise flashen. Wir führen sie nicht, weil wir keine Liste pflegen wollen, die vom Auslieferungsdatum abhängt."
+alternatives: [zyxel-nwa50ax, tplink-eap615-wall, openwrt-one]
+sources: []

@@ -1,0 +1,26 @@
+id: tplink-eap615-wall
+class: ap
+vendor: TP-Link
+model: EAP615-Wall
+revision: v1
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: ramips/mt7621}}
+soc: MT7621 + MT7915
+wifi: {generation: 6, radios: 2, chip: MediaTek MT7915}
+ports: {rj45_1g: 4}
+poe: {ports: 0, standard: 802.3af, openwrt: none, note: "Ausschließlich PoE-gespeist, kein Netzteilanschluss."}
+power: {idle_w: null, source: unknown}
+price_eur: 75
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Unterputz-Bauform für Wohnungen ohne Deckenverkabelung. Gilt in der Community
+  als der besser unterstützte der beiden Wi-Fi-6-Kandidaten.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [openwisp-template.yaml, /etc/config/wireless, /etc/config/network]
+caveats:
+  - "Omada und der zugehörige Controller werden nicht unterstützt — wir kaufen die Hardware, nicht das Ökosystem."
+  - "Ohne PoE-Quelle unbenutzbar: es gibt keinen Netzteilanschluss."
+alternatives: [zyxel-nwa50ax]
+sources:
+  - https://forum.openwrt.org/t/wifi-6-supported-devices-tp-link-or-zyxel/139764

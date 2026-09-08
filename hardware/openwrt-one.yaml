@@ -1,0 +1,23 @@
+id: openwrt-one
+class: router
+vendor: OpenWrt / Software Freedom Conservancy
+model: OpenWrt One
+revision: "*"
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: mediatek/filogic}}
+soc: MT7981B (Filogic 820)
+wifi: {generation: 6, radios: 2, chip: MediaTek}
+ports: {rj45_1g: 1, rj45_2g5: 1}
+power: {idle_w: null, source: unknown}
+price_eur: 100
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Die einzige Hardware, die vom OpenWrt-Projekt selbst herausgegeben wird.
+  Nicht unbrauchbar zu machen: ein zweiter Flash-Speicher bringt das Gerät immer zurück.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [/etc/config/network, /etc/config/firewall, /etc/config/wireless]
+caveats:
+  - "Für einen Perimeterrouter mit mehreren VLANs und Suricata zu knapp bemessen — gut als Access Point oder als Zweitgerät."
+alternatives: [glinet-mt6000]
+sources: []

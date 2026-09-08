@@ -1,0 +1,32 @@
+id: zyxel-gs1900-10hp
+class: switch
+vendor: Zyxel
+model: GS1900-10HP
+revision: v1, v2
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: realtek/rtl838x, since: "21.02"}}
+soc: RTL8380M
+ports: {rj45_1g: 8, sfp: 2}
+poe:
+  ports: 8
+  standard: 802.3af/at
+  openwrt: manual
+  note: >
+    realtek-poe ist standardmäßig installiert, die Portsteuerung erfordert aber
+    das Schreiben von /etc/config/poe von Hand. Genau diese Datei erzeugen wir.
+power: {idle_w: null, source: unknown}
+price_eur: 95
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Der einzige Switch auf der Liste, der PoE liefert und dabei vollständig unter
+  freier Firmware läuft. Dafür nur 1 GbE.
+verified: {by: none, scope: "Noch keine eigene Messung — Angaben aus Projektquellen und Forenberichten."}
+generates: [/etc/config/network, /etc/config/poe, portmatrix.md]
+caveats:
+  - "1 GbE ohne Multigigabit. Wer 2,5G oder 10G braucht, verliert hier PoE."
+  - "PoE-Budget nicht in allen Berichten sauber dokumentiert — vor größerer AP-Zahl selbst nachrechnen."
+alternatives: [zyxel-xgs1210-12, zyxel-xgs1250-12]
+sources:
+  - https://forum.openwrt.org/t/openwrt-on-zyxel-poe-switches/208356
+  - https://svanheule.net/switches/software/poe_management

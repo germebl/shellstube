@@ -1,0 +1,33 @@
+id: mikrotik-crs309-1g-8s
+class: switch
+vendor: MikroTik
+model: CRS309-1G-8S+IN
+revision: "*"
+availability: retail
+firmware:
+  recommended: vendor
+  note: >
+    RouterOS oder SwOS, per Doppelstart umschaltbar. Freie Firmware gibt es für
+    dieses Gerät nicht.
+soc: "Marvell, 2 Kerne à 800 MHz, 512 MB RAM"
+ports: {rj45_1g: 1, sfp_plus: 8}
+poe: {ports: 0, openwrt: none, note: "Kann selbst über den Gigabit-Port per PoE versorgt werden, liefert aber keines."}
+power: {idle_w: null, source: unknown, note: "Passiv gekühlt, das Metallgehäuse ist der Kühlkörper. Lüfterlos, damit lautlos."}
+price_eur: 240
+price_asof: 2026-09
+status: tolerated
+status_reason: >
+  Der einzige bezahlbare Weg zu acht Glasanschlüssen — und zugleich die Stelle,
+  an der unser Stack endet. Es gibt keinen Switch dieser Bauform mit freier
+  Firmware. Wir führen ihn, weil die Alternative wäre, so zu tun, als gäbe es
+  ihn nicht.
+verified: {by: none, scope: "Recherche, keine eigene Inbetriebnahme."}
+generates: [portmatrix.md, vlan-plan.md]
+caveats:
+  - "Wir erzeugen keine Konfiguration, sondern eine Portmatrix und einen VLAN-Plan zum Abtippen. RouterOS lässt sich zwar skripten, aber wir wollen keine Vorlage pflegen, die wir nicht im Aufbau testen."
+  - "Nur ein einziger Kupferport, und der ist für die Verwaltung gedacht. Alles andere braucht Module oder Direktkabel."
+  - "Direktkabel überbrücken wenige Meter. Für längere Strecken kommen Glasfaser und zwei Module dazu — das verschiebt die Rechnung."
+alternatives: [zyxel-xgs1250-12, zyxel-xgs1210-12]
+sources:
+  - https://mikrotik.com/product/crs309_1g_8s_in
+  - https://www.servethehome.com/mikrotik-crs309-1g-8sin-review-inexpensive-8x-10gbe-switch/

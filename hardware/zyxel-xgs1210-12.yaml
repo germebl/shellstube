@@ -1,0 +1,26 @@
+id: zyxel-xgs1210-12
+class: switch
+vendor: Zyxel
+model: XGS1210-12
+revision: A1, B1
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: realtek/rtl930x, since: "24.10"}}
+soc: RTL9302
+ports: {rj45_1g: 8, rj45_2g5: 2, sfp_plus: 2}
+poe: {ports: 0, openwrt: none}
+power: {idle_w: null, source: unknown}
+price_eur: 120
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Der günstigste Switch, den man vollständig mit freier Firmware betreiben kann,
+  inklusive zweier SFP+-Käfige.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [/etc/config/network, portmatrix.md]
+caveats:
+  - "Kein PoE. Access Points brauchen Injektoren oder einen zweiten Switch."
+  - "Die 2,5-G-Kupferports liefen lange nicht: Korrektur für A1 im August 2025, für die Platine B1 erst im Januar 2026. Aktuellen Build verwenden."
+alternatives: [zyxel-xgs1250-12, zyxel-gs1900-10hp]
+sources:
+  - https://www.paulsprogrammingnotes.com/2026/06/zyxel-xgs1210-12-openwrt-2-5g-switch.html
+  - https://firmware-selector.openwrt.org/?target=realtek%2Frtl930x

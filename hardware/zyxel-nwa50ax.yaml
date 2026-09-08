@@ -1,0 +1,27 @@
+id: zyxel-nwa50ax
+class: ap
+vendor: Zyxel
+model: NWA50AX
+revision: "*"
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: ramips/mt7621, profile: zyxel_nwa50ax, since: "22.03"}}
+soc: MT7621AT + MT7915
+wifi: {generation: 6, radios: 2, chip: MediaTek MT7915}
+ports: {rj45_1g: 1}
+poe: {ports: 0, standard: 802.3at, openwrt: none, note: "Wird selbst per PoE versorgt, liefert keines."}
+power: {idle_w: null, source: unknown}
+price_eur: 70
+price_asof: 2026-09
+status: recommended
+status_reason: >
+  Wi-Fi 6 auf MediaTek — die Funkplattform mit den besten freien Treibern.
+  Wird als Hardware gekauft, betrieben wird sie mit OpenWrt und OpenWISP.
+verified: {by: none, scope: "Noch keine eigene Messung."}
+generates: [openwisp-template.yaml, /etc/config/wireless, /etc/config/network]
+caveats:
+  - "Der Zyxel-Controller wird nicht benutzt und nicht unterstützt."
+  - "Zwei Radios, kein 6-GHz-Band."
+alternatives: [tplink-eap615-wall, openwrt-one]
+sources:
+  - https://firmware-selector.openwrt.org/?version=24.10.5&target=ramips%2Fmt7621&id=zyxel_nwa50ax
+  - https://forum.openwrt.org/t/zyxel-nwa50ax-access-point-with-openwrt/167599

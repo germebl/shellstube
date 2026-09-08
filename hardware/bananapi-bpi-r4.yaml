@@ -1,0 +1,25 @@
+id: bananapi-bpi-r4
+class: router
+vendor: Banana Pi
+model: BPI-R4
+revision: "*"
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: mediatek/filogic}}
+soc: MT7988A (Filogic 880)
+wifi: {generation: 7, radios: 3, chip: "MediaTek, als Steckkarte"}
+ports: {rj45_1g: 4, rj45_2g5: 1, sfp_plus: 2}
+power: {idle_w: null, source: unknown}
+price_eur: 180
+price_asof: 2026-09
+status: experimental
+status_reason: >
+  Die interessanteste offene Plattform mit zwei SFP+-Käfigen — aber Wi-Fi 7
+  ist in OpenWrt noch nicht angekommen, wo wir es empfehlen würden.
+verified: {by: none}
+generates: [/etc/config/network, /etc/config/firewall]
+caveats:
+  - "Multi-Link Operation und 4K-QAM stecken in Entwicklungsständen; stabile Unterstützung wird frühestens für Mitte 2026 erwartet."
+  - "Bastelplatine, kein fertiges Gerät: Gehäuse, Netzteil und Kühlung kommen dazu."
+alternatives: [glinet-mt6000]
+sources:
+  - https://forum.openwrt.org/t/wifi-7-devices-support/234914

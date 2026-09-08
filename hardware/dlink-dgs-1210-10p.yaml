@@ -1,0 +1,31 @@
+id: dlink-dgs-1210-10p
+class: switch
+vendor: D-Link
+model: DGS-1210-10P
+revision: "F3 — andere Revisionen abweichend"
+availability: retail
+firmware: {recommended: openwrt, openwrt: {target: realtek/rtl838x}}
+soc: RTL8380M
+ports: {rj45_1g: 8, combo: 2}
+poe:
+  ports: 8
+  standard: 802.3af/at
+  openwrt: broken
+  note: >
+    Auf Revision F3 erreicht realtek-poe den PoE-Controller nicht: dauerhafte
+    Prüfsummenfehler, keine Steuerung je Port (Stand Juli 2026).
+power: {idle_w: null, source: unknown}
+price_eur: 110
+price_asof: 2026-09
+status: tolerated
+status_reason: >
+  Steht als Warnung auf der Liste. Der Switch läuft unter OpenWrt, aber PoE auf
+  Revision F3 nicht — das ist der Grund, warum wir überall Revisionen nennen.
+verified: {by: none, scope: "Berichte aus dem OpenWrt-Forum, keine eigene Messung."}
+generates: [/etc/config/network, portmatrix.md]
+caveats:
+  - "PoE auf Revision F3 nicht steuerbar. Wer PoE will, nimmt den GS1900-10HP."
+  - "Revision steht auf dem Typenschild — vor dem Kauf prüfen, nicht danach."
+alternatives: [zyxel-gs1900-10hp]
+sources:
+  - https://forum.openwrt.org/t/dgs-1210-10p-rev-f3-openwrt-keeping-poe-powered-when-realtek-poe-cant-drive-the-pse/251484
