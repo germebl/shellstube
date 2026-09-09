@@ -1,0 +1,47 @@
+id: dell-optiplex-9020
+class: compute
+vendor: Dell
+model: OptiPlex 9020
+revision: "SFF und MT — die USFF-Variante hat keinen PCIe-Steckplatz"
+eol: true
+availability: used_only
+firmware: {recommended: debian}
+soc: "Intel Core i5-4590 oder vergleichbar, Haswell, 4 Kerne"
+ports: {rj45_1g: 1}
+power:
+  idle_w: null
+  source: unknown
+  note: >
+    Noch nicht gemessen. Erfahrungswerte für Haswell-SFF liegen bei 25 bis 35 W;
+    mit einer alten Grafikkarte und drehender Platte eher 40 bis 50 W. Genau deshalb
+    steht hier null und keine geschätzte Zahl — bei diesem Gerät entscheidet die
+    Leistungsaufnahme über die ganze Empfehlung.
+price_eur: 50
+price_asof: 2026-09
+status: bestand
+status_reason: >
+  Wenn er schon dasteht: uneingeschränkt brauchbar, wir erzeugen alles dafür.
+  Neu anschaffen für den Dauerbetrieb lohnt nicht — bei etwa 45 W im Leerlauf kostet er
+  rund 118 € Strom im Jahr gegenüber rund 26 € bei einem Mini-PC der N150-Klasse.
+  Der Kaufpreis ist nach gut einem halben Jahr durch Mehrstrom aufgezehrt.
+verified: {by: none, scope: "Keine eigene Messung. Der Eintrag beruht auf einem Angebot und auf Erfahrungswerten der Baureihe."}
+generates: [quadlet-units, nftables, restic-jobs, runbook.md]
+caveats:
+  - >
+    Die verbauten 16 GB sind DDR3 und passen in nichts Modernes. Der Preisanstieg 2026
+    betrifft DDR5 und DDR4, nicht DDR3 — "allein der Speicher lohnt sich" trägt hier nicht.
+  - >
+    Eine oft mitverkaufte Quadro 600 gehört raus: Fermi-Generation, für Transcoding
+    unbrauchbar, kostet nur Leerlaufwatt.
+  - >
+    Die integrierte HD 4600 kann QuickSync für H.264, aber nicht für HEVC. Für Jellyfin
+    heißt das: alte Formate ja, moderne nein.
+  - >
+    Haswell bekommt keine Microcode-Aktualisierungen mehr. Für ein Heimnetz meist
+    hinnehmbar, für einen Knoten mit Zugang von außen eine bewusste Entscheidung.
+  - >
+    Als Prüfstand dagegen ideal: eine Maschine, die man beim Ausprobieren kaputtmachen darf,
+    und die nicht durchläuft, hat das Stromproblem nicht.
+alternatives: [x86-mini-n150]
+sources:
+  - https://www.pcgameshardware.de/RAM-Hardware-154108/Specials/Speicherpreise-RAM-SSD-HDD-Rekord-August-2026-1551263/

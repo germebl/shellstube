@@ -6,7 +6,7 @@ Was hier geprueft wird, muss kein Mensch und kein Modell mehr pruefen.
 import glob, sys, yaml
 
 CLASSES = {"ont","modem","router","switch","ap","compute","storage","ups","accessory"}
-STATUS  = {"recommended","tolerated","experimental","unsupported"}
+STATUS  = {"recommended","bestand","tolerated","experimental","unsupported"}
 POE     = {"full","manual","broken","none"}
 PORTS   = {"rj45_1g","rj45_2g5","rj45_10g","sfp","sfp_plus","qsfp","combo"}
 
@@ -50,10 +50,10 @@ for f in sorted(glob.glob("hardware/*.yaml")):
         err(f, f"verified.by '{ver.get('by')}' unbekannt")
 
     # Empfohlen heisst: wir liefern etwas.
-    if d.get("status") == "recommended" and not d.get("generates"):
-        err(f, "status recommended ohne generates — dann ist es hoechstens tolerated")
-    if d.get("status") == "unsupported" and not d.get("status_reason"):
-        err(f, "unsupported ohne status_reason — die Frage 'warum nicht' muss beantwortet sein")
+    if d.get("status") in ("recommended", "bestand") and not d.get("generates"):
+        err(f, "status %s ohne generates — dann ist es hoechstens tolerated" % d.get("status"))
+    if d.get("status") in ("unsupported", "bestand") and not d.get("status_reason"):
+        err(f, "%s ohne status_reason — die Frage 'warum' muss beantwortet sein" % d.get("status"))
 
     # Ports und PoE.
     for k in (d.get("ports") or {}):
