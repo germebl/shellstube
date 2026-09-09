@@ -12,10 +12,11 @@ power:
   idle_w: null
   source: unknown
   note: >
-    Noch nicht gemessen. Erfahrungswerte für Haswell-SFF liegen bei 25 bis 35 W;
-    mit einer alten Grafikkarte und drehender Platte eher 40 bis 50 W. Genau deshalb
-    steht hier null und keine geschätzte Zahl — bei diesem Gerät entscheidet die
-    Leistungsaufnahme über die ganze Empfehlung.
+    Noch nicht gemessen. Erfahrungswerte für Haswell-SFF: mit alter Grafikkarte und
+    drehender Platte eher 40 bis 50 W, abgespeckt auf iGPU und eine einzelne SSD eher
+    22 bis 28 W. Mit eingeschalteten C-States und powertop sind auch gut 20 W berichtet.
+    Genau deshalb steht hier null und keine geschätzte Zahl — bei diesem Gerät entscheidet
+    die Leistungsaufnahme über die ganze Empfehlung.
 price_eur: 50
 price_asof: 2026-09
 status: bestand
@@ -42,6 +43,14 @@ caveats:
   - >
     Als Prüfstand dagegen ideal: eine Maschine, die man beim Ausprobieren kaputtmachen darf,
     und die nicht durchläuft, hat das Stromproblem nicht.
+  - >
+    Abspecken lohnt: Grafikkarte, optisches Laufwerk und drehende Platte raus, nur eine SSD
+    hinein. Das halbiert die Leerlaufaufnahme grob und bringt die integrierte Grafik zurück,
+    die bei gesteckter Karte im BIOS oft abgeschaltet ist.
+  - >
+    C-States sind im Dell-BIOS oft deaktiviert. Einschalten, dazu ungenutzte Anschlüsse
+    abschalten und unter Debian einmal powertop laufen lassen — das sind die Stellschrauben,
+    die bei Haswell wirklich etwas bringen.
 alternatives: [x86-mini-n150]
 sources:
   - https://www.pcgameshardware.de/RAM-Hardware-154108/Specials/Speicherpreise-RAM-SSD-HDD-Rekord-August-2026-1551263/
