@@ -66,13 +66,17 @@ einzeln.
 
 ## Am Werkzeug arbeiten
 
-    make lint      # golangci-lint, yamllint, markdownlint, vale, shellcheck
-    make test      # Unit-Tests
+    make ci        # genau das, was die CI prüft — hier anfangen
+    make test      # nur die Unit-Tests
     make test-vm   # Integrationstests gegen eine frische VM (langsam)
-    make schema    # homelab.yaml gegen das Schema prüfen
+    make lint      # zusätzliche Linter, brauchen extra Werkzeuge
 
-Bevor du einen Pull Request öffnest: `make lint test`. Was ein Werkzeug prüfen kann, prüft ein
-Werkzeug — dafür brauchst du keine Rückmeldung von uns und wir keine Diskussion.
+Bevor du einen Pull Request öffnest: **`make ci`**. Das ist dieselbe Prüfung, die die CI
+ausführt — läuft sie bei dir durch, läuft sie dort auch durch. Was ein Werkzeug prüfen kann,
+prüft ein Werkzeug; dafür brauchst du keine Rückmeldung von uns.
+
+`make lint` ist die Zugabe für lokal. Ein Linter wandert erst dann in die CI, wenn er auch
+in `make ci` steht — sonst besteht Arbeit das eine Tor und scheitert am anderen.
 
 ## Was wir nicht annehmen
 
