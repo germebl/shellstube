@@ -1,0 +1,8 @@
+# Absichtlich kaputt: ungültige tier, ungültige role, unbekanntes Feld.
+version: 1
+tier: t9
+nodes:
+  cmp-01:
+    role: dragon
+    hardware: x86-mini-n150
+unknown_top_level: true
