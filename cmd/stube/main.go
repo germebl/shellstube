@@ -8,6 +8,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
+
+	"github.com/shellstube/shellstube/internal/manifest"
 )
 
 var version = "dev" // wird beim Bauen gesetzt
@@ -47,15 +50,52 @@ Der Trockenlauf ist die Vorgabe. Wer wirklich schreiben will, sagt --apply.
 `)
 }
 
-// cmdValidate prüft ein Manifest, ohne irgendetwas zu verändern.
+// cmdValidate prüft ein oder mehrere Manifeste, ohne irgendetwas zu verändern.
 func cmdValidate(args []string) int {
 	fs := flag.NewFlagSet("validate", flag.ExitOnError)
 	schema := fs.String("schema", "schema/homelab.schema.json", "Pfad zum Schema")
 	_ = fs.Parse(args)
-	_ = schema
-	// TODO(M2): manifest.Load + manifest.Validate
-	fmt.Fprintln(os.Stderr, "noch nicht gebaut")
-	return 1
+
+	paths := fs.Args()
+	if len(paths) == 0 {
+		fmt.Fprintln(os.Stderr, "validate: mindestens ein Manifest angeben")
+		return 2
+	}
+
+	ok := true
+	for _, path := range paths {
+		if err := validateOne(path, *schema); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			ok = false
+			continue
+		}
+		fmt.Printf("%s: gültig\n", path)
+	}
+	if !ok {
+		return 1
+	}
+	return 0
+}
+
+// validateOne lädt und prüft ein einzelnes Manifest. Bei Verstößen listet die
+// Fehlermeldung jeden davon mit dem Pfad zur betroffenen Stelle auf.
+func validateOne(path, schemaPath string) error {
+	m, err := manifest.Load(path)
+	if err != nil {
+		return err
+	}
+	if err := manifest.Validate(m, schemaPath); err != nil {
+		issues, ok := err.(manifest.Issues)
+		if !ok {
+			return fmt.Errorf("%s: %w", path, err)
+		}
+		lines := make([]string, len(issues))
+		for i, issue := range issues {
+			lines[i] = "  " + issue.String()
+		}
+		return fmt.Errorf("%s: ungültig\n%s", path, strings.Join(lines, "\n"))
+	}
+	return nil
 }
 
 func cmdPlan(args []string) int {
