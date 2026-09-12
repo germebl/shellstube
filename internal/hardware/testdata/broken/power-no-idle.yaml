@@ -1,0 +1,8 @@
+id: power-no-idle
+class: compute
+vendor: Acme
+model: PowerBox2
+status: tolerated
+revision: "1"
+power: {source: unknown}
+verified: {by: none}

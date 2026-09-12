@@ -1,0 +1,9 @@
+id: caveat-no-date
+class: switch
+vendor: Acme
+model: CaveatBox
+status: tolerated
+revision: "1"
+verified: {by: none}
+caveats:
+  - "Das Problem tritt mittlerweile seltener auf, aber ohne Zeitangabe."

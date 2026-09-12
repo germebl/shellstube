@@ -1,0 +1,7 @@
+id: ports
+name: Ports
+category: dns
+summary: Ein Test.
+status: experimental
+network: {mode: bridge, ports: ["notaport", 80, 8080]}
+backup: {strategy: files}

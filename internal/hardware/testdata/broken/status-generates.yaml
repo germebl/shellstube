@@ -1,0 +1,7 @@
+id: status-generates
+class: switch
+vendor: Acme
+model: SGen
+status: recommended
+revision: "1"
+verified: {by: none}

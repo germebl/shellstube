@@ -1,0 +1,7 @@
+id: latest-tag
+name: Latest
+category: dns
+summary: Ein Test.
+status: experimental
+image: {ref: docker.io/x, tag_policy: latest}
+backup: {strategy: files}

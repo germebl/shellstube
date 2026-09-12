@@ -1,0 +1,6 @@
+id: supported-gate
+name: SG
+category: dns
+summary: Ein Test.
+status: supported
+backup: {strategy: files}

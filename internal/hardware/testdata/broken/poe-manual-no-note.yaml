@@ -1,0 +1,8 @@
+id: poe-manual-no-note
+class: switch
+vendor: Acme
+model: PoeManual
+status: tolerated
+revision: "1"
+poe: {ports: 4, openwrt: manual}
+verified: {by: none}

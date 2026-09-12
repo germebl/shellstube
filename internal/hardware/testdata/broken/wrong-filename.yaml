@@ -1,0 +1,8 @@
+id: actual-id
+class: switch
+vendor: Acme
+model: Test
+status: recommended
+revision: "1"
+verified: {by: none}
+generates: [x]
