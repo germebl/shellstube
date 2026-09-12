@@ -1,0 +1,7 @@
+id: bestand-both
+class: compute
+vendor: Acme
+model: Bestand
+status: bestand
+revision: "1"
+verified: {by: none}

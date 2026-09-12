@@ -1,0 +1,8 @@
+id: status-reason-missing
+class: switch
+vendor: Acme
+model: SReason
+status: unsupported
+revision: "1"
+verified: {by: none}
+generates: []

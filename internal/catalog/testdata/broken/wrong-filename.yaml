@@ -1,0 +1,6 @@
+id: actual-id
+name: Actual
+category: dns
+summary: Ein Test.
+status: experimental
+backup: {strategy: files}

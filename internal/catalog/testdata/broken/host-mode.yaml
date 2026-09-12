@@ -1,0 +1,7 @@
+id: host-mode
+name: Host
+category: dns
+summary: Ein Test.
+status: experimental
+network: {mode: host}
+backup: {strategy: files}

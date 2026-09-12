@@ -10,6 +10,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/shellstube/shellstube/internal/catalog"
+	"github.com/shellstube/shellstube/internal/hardware"
 	"github.com/shellstube/shellstube/internal/manifest"
 )
 
@@ -29,6 +31,10 @@ func main() {
 		os.Exit(cmdApply(os.Args[2:]))
 	case "remove":
 		os.Exit(cmdRemove(os.Args[2:]))
+	case "hardware":
+		os.Exit(cmdHardware(os.Args[2:]))
+	case "catalog":
+		os.Exit(cmdCatalog(os.Args[2:]))
 	case "version":
 		fmt.Println(version)
 	default:
@@ -44,6 +50,8 @@ func usage() {
   stube plan     <manifest>   Rollen, Ports, VLANs und Strecke ableiten und zeigen
   stube apply    <manifest>   Artefakte schreiben. Ohne --apply nur ein Trockenlauf.
   stube remove   <manifest>   Erzeugtes wieder entfernen, vollständig
+  stube hardware list         id je Zeile, aus hardware/*.yaml
+  stube catalog  list         id je Zeile, aus catalog/services/*.yaml
   stube version
 
 Der Trockenlauf ist die Vorgabe. Wer wirklich schreiben will, sagt --apply.
@@ -121,4 +129,48 @@ func cmdRemove(args []string) int {
 	// TODO(M2): render.Remove — Units, Volumes, Proxy-Einträge, Sicherungsaufträge
 	fmt.Fprintln(os.Stderr, "noch nicht gebaut")
 	return 1
+}
+
+// cmdHardware liest hardware/*.yaml und listet, was sich einlesen lässt.
+func cmdHardware(args []string) int {
+	fs := flag.NewFlagSet("hardware", flag.ExitOnError)
+	dir := fs.String("dir", "hardware", "Verzeichnis mit hardware/*.yaml")
+	_ = fs.Parse(args)
+
+	if fs.NArg() != 1 || fs.Arg(0) != "list" {
+		fmt.Fprintln(os.Stderr, "hardware: stube hardware list")
+		return 2
+	}
+
+	devices, err := hardware.Load(*dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	for _, d := range devices.List {
+		fmt.Println(d.ID)
+	}
+	return 0
+}
+
+// cmdCatalog liest catalog/services/*.yaml und listet, was sich einlesen lässt.
+func cmdCatalog(args []string) int {
+	fs := flag.NewFlagSet("catalog", flag.ExitOnError)
+	dir := fs.String("dir", "catalog/services", "Verzeichnis mit catalog/services/*.yaml")
+	_ = fs.Parse(args)
+
+	if fs.NArg() != 1 || fs.Arg(0) != "list" {
+		fmt.Fprintln(os.Stderr, "catalog: stube catalog list")
+		return 2
+	}
+
+	services, err := catalog.Load(*dir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	for _, s := range services.List {
+		fmt.Println(s.ID)
+	}
+	return 0
 }

@@ -1,0 +1,8 @@
+id: price-no-asof
+class: switch
+vendor: Acme
+model: PriceBox
+status: tolerated
+revision: "1"
+verified: {by: none}
+price_eur: 99

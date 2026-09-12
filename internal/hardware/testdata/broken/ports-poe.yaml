@@ -1,0 +1,9 @@
+id: ports-poe
+class: switch
+vendor: Acme
+model: PortsPoe
+status: tolerated
+revision: "1"
+ports: {rj45_1g: 4, weird_port: 1}
+poe: {ports: 2, openwrt: crazy}
+verified: {by: none}

@@ -1,0 +1,8 @@
+id: alt-unknown
+class: switch
+vendor: Acme
+model: AltBox
+status: tolerated
+revision: "1"
+verified: {by: none}
+alternatives: [does-not-exist]

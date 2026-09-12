@@ -1,0 +1,7 @@
+id: verified-bad
+class: compute
+vendor: Acme
+model: VBox
+status: tolerated
+revision: "1"
+verified: {by: vendor}

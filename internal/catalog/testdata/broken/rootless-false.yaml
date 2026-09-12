@@ -1,0 +1,7 @@
+id: rootless-false
+name: RF
+category: dns
+summary: Ein Test.
+status: experimental
+rootless: false
+backup: {strategy: files}

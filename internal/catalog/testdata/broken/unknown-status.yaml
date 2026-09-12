@@ -1,0 +1,6 @@
+id: unknown-status
+name: US
+category: dns
+summary: Ein Test.
+status: beta
+backup: {strategy: files}

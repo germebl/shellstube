@@ -1,0 +1,7 @@
+id: memory
+name: Mem
+category: dns
+summary: Ein Test.
+status: experimental
+resources: {memory_mb: 100, memory_source: guessed}
+backup: {strategy: files}
