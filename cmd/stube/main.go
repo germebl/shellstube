@@ -13,6 +13,7 @@ import (
 	"github.com/shellstube/shellstube/internal/catalog"
 	"github.com/shellstube/shellstube/internal/hardware"
 	"github.com/shellstube/shellstube/internal/manifest"
+	"github.com/shellstube/shellstube/internal/plan"
 )
 
 var version = "dev" // wird beim Bauen gesetzt
@@ -106,10 +107,49 @@ func validateOne(path, schemaPath string) error {
 	return nil
 }
 
+// cmdPlan prueft ein Manifest und leitet daraus Rollen, Ports, VLANs, die
+// Streckenpruefung und den Speicherbedarf ab.
 func cmdPlan(args []string) int {
-	// TODO(M2): plan.Derive und Ausgabe als Tabelle
-	fmt.Fprintln(os.Stderr, "noch nicht gebaut")
-	return 1
+	fs := flag.NewFlagSet("plan", flag.ExitOnError)
+	schema := fs.String("schema", "schema/homelab.schema.json", "Pfad zum Schema")
+	hardwareDir := fs.String("hardware", "hardware", "Verzeichnis mit hardware/*.yaml")
+	catalogDir := fs.String("catalog", "catalog/services", "Verzeichnis mit catalog/services/*.yaml")
+	_ = fs.Parse(args)
+
+	if fs.NArg() != 1 {
+		fmt.Fprintln(os.Stderr, "plan: stube plan <manifest>")
+		return 2
+	}
+	path := fs.Arg(0)
+
+	if err := validateOne(path, *schema); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+
+	m, err := manifest.Load(path)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	devices, err := hardware.Load(*hardwareDir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	services, err := catalog.Load(*catalogDir)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+
+	p, err := plan.Derive(m, devices, services)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	fmt.Print(plan.Render(p))
+	return 0
 }
 
 // cmdApply schreibt Artefakte. Ohne --apply passiert nichts außer Ausgabe.
